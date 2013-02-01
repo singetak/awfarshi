@@ -52,5 +52,4 @@
 	</div>
 </div>
 <!-- ENDS sidebar -->
-<div class="clear"></div>
 <?php $this->endContent(); ?>

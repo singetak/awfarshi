@@ -84,8 +84,8 @@
 			          array('label'=>'Home', 'url'=>array('/site/index')),
 			          array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
 			          array('label'=>'Contact', 'url'=>array('/site/contact')),
-			          array('label'=>'Promotion', 'url'=>array('/promotion/'), 'visible'=>!Yii::app()->user->isGuest),
-			          array('label'=>'Featured Promotion', 'url'=>array('/featuredpromotion/'), 'visible'=>!Yii::app()->user->isGuest),
+			          array('label'=>'Promotion', 'url'=>array('/promotion/')),
+			          array('label'=>'Featured Promotion', 'url'=>array('/featuredpromotion/')),
 			          array('label'=>'Category', 'url'=>array('/category/'), 'visible'=>!Yii::app()->user->isGuest),
 			          array('label'=>'Company', 'url'=>array('/company/'), 'visible'=>!Yii::app()->user->isGuest),
 			          //array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
@@ -110,7 +110,7 @@
 	        	<!-- Page wrap -->
 	        	<div id="page-wrap">
 	        		<?php echo $content; ?>
-  
+	        		<div class="clear"></div>	
 	        	</div>
 	        	<!-- ENDS Page wrap -->
 	        	

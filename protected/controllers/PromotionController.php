@@ -196,9 +196,12 @@ class PromotionController extends Controller
 	 */
 	public function actionIndex()
 	{
+		$this->layout='//layouts/column1';
 		$dataProvider=new CActiveDataProvider('Promotion');
+		$arraycategories = Category::model()->findRecentCategories();
+		$cats = CHtml::listData($arraycategories, 'id_category', 'name');	
 		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+			'dataProvider'=>$dataProvider,'arraycategories'=>$cats,
 		));
 	}
 
