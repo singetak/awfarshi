@@ -194,15 +194,44 @@ class PromotionController extends Controller
 	/**
 	 * Lists all models.
 	 */
-	public function actionIndex()
+	public function actionIndex($category = '')
 	{
+		$curr_page = isset($_GET['page']) ? $_GET['page'] : 1;
+		$pageSize=Yii::app()->params->promotionsCount; 
+		$qty_items = 0;
 		$this->layout='//layouts/column1';
-		$dataProvider=new CActiveDataProvider('Promotion');
+		$category = strtolower($category);
+		$notacategory = 1;
 		$arraycategories = Category::model()->findRecentCategories();
-		$cats = CHtml::listData($arraycategories, 'id_category', 'name');	
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,'arraycategories'=>$cats,
-		));
+		$cats = CHtml::listData($arraycategories, 'id_category', 'name');
+		foreach($cats as $subcategory){
+			if(strtolower($subcategory) == $category){
+				$notacategory = 0;
+				break;
+			}
+		}
+		if($notacategory == false || $category == ''){
+			$idArray = array();
+			$dataIdProvider = Promotion::model()->returnPromotions($keyword = $category, $limit = 100);
+			$qty_items = count($dataIdProvider);
+			
+			$qty_pages = ceil($qty_items / $pageSize);
+			
+			$next_page = $curr_page < $qty_pages ? $curr_page + 1 : null;
+			$prev_page = $curr_page > 1 ? $curr_page - 1 : null;
+			
+			$offset = ($curr_page - 1) * $pageSize;
+			$dataIdProvider = array_slice($dataIdProvider, $offset, $pageSize);
+			
+			foreach($dataIdProvider as $item)
+				$idArray[] = $item['id_promotion'];
+			
+			$criteria = new CDbCriteria();
+			$criteria->addInCondition("id_promotion", $idArray);
+			$dataProvider = Promotion::model()->findAll($criteria);
+			$this->render('index',array('dataProvider'=>$dataProvider,'arraycategories'=>$cats,'category'=>$category,'prev_page'=>$prev_page,'next_page'=>$next_page,'qty_pages'=>$qty_pages,'curr_page'=>$curr_page));
+		}else
+			throw new CHttpException(404, 'The category you chose doesn\'t exist');
 	}
 
 	/**

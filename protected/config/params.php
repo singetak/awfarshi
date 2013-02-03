@@ -17,6 +17,8 @@ return array(
 	// the copyright information displayed in the footer section
 	'recentPromotionsCount'=>3,
 	'recentFeaturedPromotionsCount'=>10,
+	'promotionsCount'=>3,
+	'featuredPromotionsCount'=>3,
 	'sendEmail'=>true,
 	'commentEnabled'=>false,
 	'websiteName'=>'awfarshi.com',

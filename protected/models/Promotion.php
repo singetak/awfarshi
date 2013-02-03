@@ -180,6 +180,7 @@ class Promotion extends CActiveRecord
 	public function suggestPromotions($keyword = '',$limit=20)
 	{
 		$sql= 'SELECT id_promotion as id ,title AS label FROM tbl_promotion WHERE title LIKE :keyword';
+		$sql= $sql . ' LIMIT ' . $limit;
         $keyword = $keyword.'%';
 				
         return Yii::app()->db->createCommand($sql)->queryAll(true,array(':keyword'=>$keyword));
@@ -192,5 +193,27 @@ class Promotion extends CActiveRecord
 	{
 		return Yii::app()->createUrl('promotion/view', array('id'=>$this->id_promotion,'title'=>$this->title,));
 	}
-	
+	/**
+	 * Returns promomtions matching the specified keyword.
+	 * @param string the keyword to be matched
+	 * @param integer maximum number of tags to be returned
+	 * @return array list of matching tag names
+	 */
+	public function returnPromotions($keyword = '',$page = 1 ,$limit=20)
+	{
+		if($keyword != ''){
+			$sql= 'SELECT distinct tbl_promotion.id_promotion
+			FROM tbl_promotion, tbl_featured_promotion_mapping, tbl_category
+			WHERE tbl_promotion.id_promotion = tbl_featured_promotion_mapping.id_promotion
+			AND tbl_featured_promotion_mapping.id_category = tbl_category.id_category
+			AND tbl_promotion.active = 1 AND lower(tbl_category.name) = :keyword';
+		}else{
+			$sql= 'SELECT distinct id_promotion
+			FROM tbl_promotion
+			WHERE active = 1';
+		}
+			
+		$sql= $sql . ' LIMIT ' . $limit; 		
+        return Yii::app()->db->createCommand($sql)->queryAll(true,array(':keyword'=>$keyword));
+	}
 }

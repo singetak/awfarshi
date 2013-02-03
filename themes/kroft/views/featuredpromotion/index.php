@@ -21,9 +21,9 @@ $this->menu=array(
 
 	<!-- filter -->
 	<ul class="gallery-filter">
-		<?php foreach($arraycategories as $category): ?>
+		<?php foreach($arraycategories as $subcategory): ?>
 		<li>
-			<?php echo CHtml::link(CHtml::encode($category), $category); ?>
+			<?php echo CHtml::link(CHtml::encode($subcategory), array('featuredpromotions/'.$subcategory)); ?>
 		</li>
 		<?php endforeach; ?>
 	</ul>
@@ -32,9 +32,8 @@ $this->menu=array(
 
 	<!-- Thumbnails -->
 	<ul class="work-thumbs" >
-		<?php 
-			$data = $dataProvider->getData();
-			foreach($data as $i => $item){
+		<?php
+			foreach($dataProvider as $i => $item){
 				Yii::app()->controller->renderPartial('_viewfeatured',array('index' => $i, 'data' => $item, 'widget' => $this));
 			}
 			?>
@@ -42,18 +41,21 @@ $this->menu=array(
 	<div class="clear"></div>	
     <!-- ENDS Thumbnails -->
     
-    <!-- pager 
+    <!-- pager -->
 	<ul class='pager'>
-		<li class='first-page'><a href='#'>&laquo;</a></li>
-		<li><a href='#' >&lsaquo;</a></li>
-		<li><a href='#' >2</a></li>
-		<li><a href='#' >3</a></li>
-		<li class='active'><a href='#'>4</a></li>
-		<li><a href='#' >5</a></li>
-		<li><a href='#' >6</a></li>
-		<li><a href='#' >&rsaquo;</a></li>
-		<li class='last-page'><a href='#'>&raquo;</a></li>
-	</ul>-->	
+		<?php $tempPath= 'featuredpromotions'; if($category != '')$tempPath = $tempPath . '/'.$category;?>
+		<li class='first-page'><?php echo CHtml::link('&laquo;', array($tempPath.'/?page=1')); ?></li>
+		<? if($prev_page): ?>
+		<li><?php echo CHtml::link('&lsaquo;', array($tempPath.'/?page='.$prev_page)); ?>
+		<? endif ?>
+		<? for($i = 1; $i <= $qty_pages; $i++): ?>
+		<li class="<?php echo ($i == $curr_page) ? 'active' : '' ?>"><?php echo CHtml::link(CHtml::encode($i), array($tempPath.'/?page='.$i)); ?></li>
+		<? endfor ?>
+		<? if($next_page): ?>
+			<li><?php echo CHtml::link('&rsaquo;', array($tempPath.'/?page='.$next_page)); ?></li>
+		<? endif ?>
+		<li class='last-page'><?php echo CHtml::link('&raquo;', array($tempPath.'/?page='.$qty_pages)); ?></li>
+	</ul>
 	<div class="clear"></div>
 	<!-- ENDS pager -->
 	
